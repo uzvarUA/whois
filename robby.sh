@@ -31,11 +31,16 @@ whois_output=$(whois "$domain")
 # 🧠 Витягуємо дату створення
 creation_date=$(echo "$whois_output" | grep -iE 'Creation Date:' | head -n 1 | awk '{print $NF}')
 
+# 🧠 Функція форматування дати
+format_date() {
+  date -d "$1" '+%Y-%m-%d %H:%M:%S' 2>/dev/null || echo "$1"
+}
+
 # 📄 Створюємо Markdown-звіт
 report="uzvar-whois-$domain.md"
 {
   echo "# 🌐 WHOIS Звіт: $domain"
-  echo "- 📅 Дата створення: \`$creation_date\`"
+  echo "- 📅 Дата створення: \`$(format_date "$creation_date")\`"
   echo "- 🕵️‍♂️ Витягнуто: \`$(date '+%Y-%m-%d %H:%M:%S')\`"
   echo "- 🧰 Інструмент: UzvarUA Whois Lookup"
   echo ""
